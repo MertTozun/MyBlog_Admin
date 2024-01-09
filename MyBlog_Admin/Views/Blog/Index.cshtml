@@ -1,0 +1,47 @@
+﻿@model IEnumerable<MyBlog_Admin.Models.BlogPost>
+@{
+	ViewData["Title"] = "BlogPost";
+}
+
+<!-- DataTales Example -->
+<div class="card shadow mb-4">
+	<div class="card-header py-3">
+		<h6 class="m-0 font-weight-bold text-primary">Blog Post List</h6>
+	</div>
+	<div class="card-body">
+		<div class="table-responsive">
+			<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+				<thead>
+					<tr>
+						<th scope="col">Id</th>
+						<th scope="col">Name</th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<div class="mb-3">
+						<a href="/Blog/Blog" class="btn btn-success">Add Blog</a>
+					</div>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<th scope="row">@item.Id</th>
+							<td>@item.Title</td>
+							<td class="d-flex justify-content-center align-items-center">
+								@if (item.IsPublish)
+								{
+									<a class="btn btn-success">Posted</a>
+
+								}
+								else
+								{
+									<a class="btn btn-light" asp-route-id="@item.Id" asp-action="Publish">Post</a>
+								}
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

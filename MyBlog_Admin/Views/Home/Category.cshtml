@@ -1,0 +1,94 @@
+﻿@model IEnumerable<MyBlog_Admin.Models.Category>
+@{
+	ViewData["Title"] = "Category";
+}
+
+<!-- Begin Page Content -->
+<div class="container-fluid">
+
+	<!-- DataTales Example -->
+	<div class="card shadow mb-4">
+		<div class="card-header py-3">
+			<h6 class="m-0 font-weight-bold text-primary">Category List</h6>
+		</div>
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+					<thead>
+						<tr>
+							<th scope="col">Id</th>
+							<th scope="col">Name</th>
+							<th scope="col"></th>
+						</tr>
+					</thead>
+					<tbody>
+						<div class="mb-3">
+							<a onclick="$('#CategoryModal').modal('show')" class="btn btn-success">AddCategory</a>
+						</div>
+						@foreach (var item in Model)
+						{
+							<tr>
+								<th scope="row">@item.Id</th>
+								<td>@item.Name</td>
+								<td class="d-flex justify-content-end align-items-center">
+									<a style="margin-right: 1rem;" class="btn btn-danger" asp-route-id="@item.Id" asp-action="DeleteCategory">Delete</a>
+									<button class="btn btn-secondary" onclick="updateForm(@item.Id)" type="button">Update</button>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div class="modal" id="CategoryModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Category</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				<form method="post" action="/Home/AddCategory" autocomplete="off">
+					<div class="modal-body">
+						<div class="form-group">
+							<input type="hidden" name="Id" id="Id" class="form-control" />
+							<input type="text" name="Name" id="Name" class="form-control" />
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" onclick="clearForm" data-bs-dismiss="modal">Close</button>
+						<button type="submit" id="saveBtn" class="btn btn-primary">Add</button>
+						<button type="submit" id="updateBtn" class="btn btn-primary">Update</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+
+</div>
+<!-- /.container-fluid -->
+@*sayfa için kullanılan js kodu...*@
+@section Scripts {
+	<script>
+		$(() => clearForm())
+		function updateForm(Id) {
+			fetch('/Home/CategoryDetails?Id=' + Id)
+				.then(res => res.json())
+				.then(res => {
+					$('#Id').val(res.id)
+					$('#Name').val(res.name)
+				})
+			$('#saveBtn').hide();
+			$('#updateBtn').show();
+			$('#CategoryModal').modal('show');
+		}
+
+		function clearForm() {
+			$('#Id').val(null)
+			$('#Name').val(null)
+			$('#saveBtn').show();
+			$('#updateBtn').hide();
+		}
+	</script>
+}
